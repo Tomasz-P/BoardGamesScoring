@@ -3,6 +3,7 @@
 __VERSION__ = '1.0.C'
 
 from my_package.appcli import Cli
+from my_package.boardgame import BoardGames
 
 
 # DEFINED FUNCTIONS
@@ -28,10 +29,11 @@ def main():
     cli = Cli()
     cli.clean_console()
     print(f'\nBoardGamesScoring version: {__VERSION__}')
-    menu = cli.create_choice_menu('Choose a board game:', BG_NAMES)
-    print(menu)
-    number_of_values = input('Enter number of gamers: ')
-    name = cli.enter_values('Name of the gamer', number_of_values)
+    boardgame = cli.create_choice_menu('Choose a board game:', BG_NAMES, 'Choice:')
+    number_of_gamers = input('Enter number of gamers: ')
+    names_of_gamers = cli.enter_values('Name of the gamer', number_of_gamers)
+
+    print(boardgame, names_of_gamers)
 
 
 # MAIN PROGRAM
