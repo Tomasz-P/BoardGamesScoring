@@ -2,6 +2,7 @@
 
 __VERSION__ = '1.0.0'
 
+from my_package.dir_operations import inner_to_outer_dir
 
 # CLASSES
 
@@ -21,30 +22,45 @@ class TerraformingMars(object):
                            'Builder':5,
                            'Planner':5}
 
-    def get_funded_awards_resources(self, gamer_name):
+    def get_gamers_tr_vps(self, gamers_names_list):
+        """Get Victory Points (VPs) for each gamer. Return a directory."""
+        gamers_tr_vps = {}
+        for gamer_name in gamers_names_list:
+            TR_vps = int(input(f'{gamer_name}\'s Terraform Rating (TR): '))
+            gamers_tr_vps[gamer_name] = TR_vps
+        return gamers_tr_vps
+
+    def get_funded_awards_resources(self, gamers_names_list):
         """Get three funded awards during the game."""
-        award_resources = {}
+        funded_awards_resources = {}
         for award in self.AWARDS.keys():
             answer = ''
             while (answer is not 'y') and (answer is not 'n'):
                 answer = input(f'Award "{award}" was funded [y/n]: ')
             if answer == 'y':
-                if award == 'Landlord':
-                    tiles_in_play = int(input(f'Enter {gamer_name}\'s total number of tiles in play: '))
-                    award_resources[award] = tiles_in_play
-                elif award == 'Banker':
-                    megacredits_production = int(input(f'Enter {gamer_name}\'s megacredists production: '))
-                    award_resources[award] = megacredits_production
-                elif award == 'Scientist':
-                    science_tags_in_play = int(input(f'Enter {gamer_name}\'s science tag in play: '))
-                    award_resources[award] = science_tags_in_play
-                elif award == 'Thermalist':
-                    heat_resource_cubes = int(input(f'Enter {gamer_name}\'s heat resource cubes: '))
-                    award_resources[award] = heat_resource_cubes
-                elif award == 'Miner':
-                    steel_and_titanium_resource_cubes = int(input(f'Enter {gamer_name}\'s steel and titanium resource cubes: '))
-                    award_resources[award] = steel_and_titanium_resource_cubes
-        return award_resources
+                gamers_resources = {}
+                for gamer_name in gamers_names_list:
+                    if award == 'Landlord':
+                        tiles_in_play = int(input(f'Enter {gamer_name}\'s total number of tiles in play: '))
+                        gamers_resources[gamer_name] = tiles_in_play
+                    elif award == 'Banker':
+                        megacredits_production = int(input(f'Enter {gamer_name}\'s megacredists production: '))
+                        gamers_resources[gamer_name] = megacredits_production
+                    elif award == 'Scientist':
+                        science_tags_in_play = int(input(f'Enter {gamer_name}\'s science tag in play: '))
+                        gamers_resources[gamer_name] = science_tags_in_play
+                    elif award == 'Thermalist':
+                        heat_resource_cubes = int(input(f'Enter {gamer_name}\'s heat resource cubes: '))
+                        gamers_resources[gamer_name] = heat_resource_cubes
+                    elif award == 'Miner':
+                        steel_and_titanium_resource_cubes = int(input(f'Enter {gamer_name}\'s steel and titanium resource cubes: '))
+                        gamers_resources[gamer_name] = steel_and_titanium_resource_cubes
+                funded_awards_resources[award] = gamers_resources
+        return funded_awards_resources
+
+    def get_gamers_awards_vps(self, gamers_awards_resources):
+        """Calculate Victory Points obtained from funded awards resources."""
+        pass
 
     def get_claimed_milestones(self, gamer_name):
         """Get milestones claimed during the game."""
@@ -73,12 +89,14 @@ class TerraformingMars(object):
             greenery_tiles_adjacent_to_city_tile_vps += int(input(f'Greenery tiles adjacent to {city_tile_number}. city tile: '))
         return greenery_tiles_vps, greenery_tiles_adjacent_to_city_tile_vps
 
-    def get_gamer_achievements(self, gamer_name):
+    def get_gamer_achievements(self, gamers_names):
         """Score 'Terraforming Mars' board game."""
         print('\nTERRAFORMING RATE\n')
-        TR_vps = int(input(f'{gamer_name}\'s Terraform Rating (TR): '))
+        gamers_tr_vps = self.get_gamers_tr_vps(gamers_names)
+        print(gamers_tr_vps)
         print('\nAWARDS\n')
-        awards_resources = self.get_funded_awards_resources(gamer_name)
+        gamers_awards_resources = self.get_funded_awards_resources(gamers_names)
+        print(gamers_awards_resources)
         print('\nMILESTONES\n')
         milestones_vps = self.get_milestones_vps(self.get_claimed_milestones(gamer_name))
         print('\nGAME BOARD TILES')
@@ -87,5 +105,5 @@ class TerraformingMars(object):
         resources_cards_vps = int(input(f'Resources cards Victory Points (VPs): '))
         print('\nCARDS\n')
         cards_vps = int(input(f'Cards Victory Points (VPs): '))
-        return TR_vps, awards_resources, milestones_vps, greenery_tiles_vps, greenery_tiles_adjacent_to_city_tile_vps,\
+        return TR_vps, gamers_awards_resources, milestones_vps, greenery_tiles_vps, greenery_tiles_adjacent_to_city_tile_vps,\
                resources_cards_vps, cards_vps
