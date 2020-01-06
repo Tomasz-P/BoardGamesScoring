@@ -3,10 +3,19 @@
 __VERSION__ = '1.0.C'
 
 from my_package.appcli import Cli
-from my_package.boardgame import BoardGames
+from my_package.boardgame import TerraformingMars
 
 
 # DEFINED FUNCTIONS
+
+def score_game_points(boardgame, gamers):
+    """Score points in indcated game board."""
+    gamers_achievements = {}
+    if boardgame == 'Terraforming Mars':
+        terraforming_mars = TerraformingMars()
+        for gamer in gamers:
+            gamers_achievements[gamer] = terraforming_mars.get_gamer_achievements(gamer)
+        print(gamers_achievements)
 
 def main():
     """Main function."""
@@ -29,11 +38,10 @@ def main():
     cli = Cli()
     cli.clean_console()
     print(f'\nBoardGamesScoring version: {__VERSION__}')
-    boardgame = cli.create_choice_menu('Choose a board game:', BG_NAMES, 'Choice:')
+    boardgame = cli.create_choice_menu('Choose a board game:', BG_NAMES, 'Choice: ')
     number_of_gamers = input('Enter number of gamers: ')
     names_of_gamers = cli.enter_values('Name of the gamer', number_of_gamers)
-
-    print(boardgame, names_of_gamers)
+    score_game_points(boardgame, names_of_gamers)
 
 
 # MAIN PROGRAM
