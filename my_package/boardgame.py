@@ -130,6 +130,14 @@ class TerraformingMars(object):
         gameboard_tiles_vps.pop('city_tiles', None)
         return gameboard_tiles_vps
 
+    def get_resources_cards_vps(self, gamers_names_list):
+        """Get Victory Points (VPs) claimed from resources cards."""
+        pass
+
+    def get_other_cards_vps(self, gamers_names_list):
+        """Get Victory Points (VPs) claimed from other cards."""
+        pass
+
     def get_gamer_achievements(self, gamers_names):
         """Score 'Terraforming Mars' board game."""
         print('\nTERRAFORMING RATE\n')
@@ -148,8 +156,8 @@ class TerraformingMars(object):
         #tiles_vps = self.get_tiles_vps(gamers_names)
         #print(tiles_vps)
         print('\nRESOURCES CARDS\n')
-        resources_cards_vps = int(input(f'Resources cards Victory Points (VPs): '))
-        print('\nCARDS\n')
-        cards_vps = int(input(f'Cards Victory Points (VPs): '))
-        return TR_vps, gamers_awards_resources, milestones_vps, greenery_tiles_vps, greenery_tiles_adjacent_to_city_tile_vps,\
-               resources_cards_vps, cards_vps
+        #resources_cards_vps = int(input(f'Resources cards Victory Points (VPs): '))
+        print('\nOTHER CARDS\n')
+        #cards_vps = int(input(f'Cards Victory Points (VPs): '))
+        #return TR_vps, gamers_awards_resources, milestones_vps, greenery_tiles_vps, greenery_tiles_adjacent_to_city_tile_vps,\
+        #       resources_cards_vps, cards_vps
