@@ -30,17 +30,17 @@ class Cli(object):
         """Create a menu consisting of an entry text, a number of positions given by
          a python list and a choice text. Return the text of chosen position.
          """
-        positions_dir = {}
+        positions_dict = {}
         menu_string = '\n' + entry_text + '\n\n'
         number = 1
         for position in sorted(positions):
             number_of_spaces = len(str(len(positions))) + 1 - len(str(number))
             menu_string += f'{number})' + number_of_spaces * ' ' + f'{position}\n'
-            positions_dir[number] = position
+            positions_dict[number] = position
             number += 1
         print(menu_string)
         choice = int(input(choice_text))
-        return positions_dir[choice]
+        return positions_dict[choice]
 
     def enter_values(self, text, number_of_texts):
         """Enter next values and return the list of enterred values."""

@@ -2,7 +2,7 @@
 
 __VERSION__ = '1.0.0'
 
-from my_package.dir_operations import inner_to_outer_dir
+from my_package.dict_operations import inner_to_outer_dict
 
 # CLASSES
 
@@ -16,14 +16,17 @@ class TerraformingMars(object):
                        'Scientist':[5,2],
                        'Thermalist':[5,2],
                        'Miner':[5,2]}
-        self.MILESTONES = {'Terraformer':5,
-                           'Mayor':5,
-                           'Gardener':5,
-                           'Builder':5,
-                           'Planner':5}
+        self.MILESTONES = ['Terraformer',
+                           'Mayor',
+                           'Gardener',
+                           'Builder',
+                           'Planner']
+        self.MILESTONE_WORTH = 5
 
     def get_gamers_tr_vps(self, gamers_names_list):
-        """Get Victory Points (VPs) for each gamer. Return a directory."""
+        """Get Victory Points (VPs) achived by each gamer as Terraforming Rate (TR).
+        Return a dictionary.
+        """
         gamers_tr_vps = {}
         for gamer_name in gamers_names_list:
             TR_vps = int(input(f'{gamer_name}\'s Terraform Rating (TR): '))
@@ -31,7 +34,7 @@ class TerraformingMars(object):
         return gamers_tr_vps
 
     def get_funded_awards_resources(self, gamers_names_list):
-        """Get three funded awards during the game."""
+        """Get resources owned by each gamer corresponding to funded awards during the game."""
         funded_awards_resources = {}
         for award in self.AWARDS.keys():
             answer = ''
@@ -58,49 +61,92 @@ class TerraformingMars(object):
                 funded_awards_resources[award] = gamers_resources
         return funded_awards_resources
 
-    def get_gamers_awards_vps(self, gamers_awards_resources):
+    def get_gamers_awards_vps(self, gamers_names_list):
         """Calculate Victory Points obtained from funded awards resources."""
-        pass
+        # dict(sorted(d.items(), key=lambda item: item[1], reverse=True))
 
-    def get_claimed_milestones(self, gamer_name):
-        """Get milestones claimed during the game."""
-        milestones_claimed = []
-        for milestone in self.MILESTONES.keys():
-            answer = ''
-            while (answer is not 'y') and (answer is not 'n'):
-                answer = input(f'Milestone "{milestone}" claimed [y/n]: ')
-            if answer == 'y':
-                milestones_claimed.append(milestone)
-        return milestones_claimed
+    def get_gamers_milestones(self, gamers_names_list):
+        """Get milestones claimed during the game by the gamers and return a dictionary
+        with gamers' names as keys and lists of claimed milestones by each gamer as
+        values.
+        """
+        milestones_claimed_by_users = {}
+        for gamer in gamers_names_list:
+            milestones_claimed_by_users.setdefault(gamer, [])
+        for milestone in self.MILESTONES:
+            for gamer in gamers_names_list:
+                answer = ''
+                while (answer is not 'y') and (answer is not 'n'):
+                    answer = input(f'{gamer} claimed a milestone "{milestone}" [y/n]: ')
+                if answer == 'y':
+                    milestones_claimed_by_users[gamer].append(milestone)
+                    break
+        return milestones_claimed_by_users
 
-    def get_milestones_vps(self, claimed_milestones):
-        """Get milestones Victory Points (VPs)."""
-        milestones_vps = 0
-        for milestone in claimed_milestones:
-            milestones_vps += self.MILESTONES[milestone]
-        return milestones_vps
+    def get_gamers_milestones_vps(self, gamers_names_list):
+        """Get milestones Victory Points (VPs) achieved by every gamer."""
+        gamers_milestones_vps = {}
+        milestones_claimed_by_users = self.get_gamers_milestones(gamers_names_list)
+        for gamer in milestones_claimed_by_users:
+            gamers_milestones_vps[gamer] = len(milestones_claimed_by_users[gamer]) * self.MILESTONE_WORTH
+        return gamers_milestones_vps
 
-    def get_gameboard_vps(self, game_namer):
-        """Get victory points (VPs) claimed from the map on the game board."""
-        greenery_tiles_vps = int(input(f'\nNumber of {game_namer}\'s greenery tiles: '))
-        city_tiles = int(input(f'Number of {game_namer}\'s city tiles: '))
-        greenery_tiles_adjacent_to_city_tile_vps = 0
-        for city_tile_number in range(1, city_tiles + 1):
-            greenery_tiles_adjacent_to_city_tile_vps += int(input(f'Greenery tiles adjacent to {city_tile_number}. city tile: '))
-        return greenery_tiles_vps, greenery_tiles_adjacent_to_city_tile_vps
+    def get_greenery_tiles(self, gamers_names_list):
+        """Get number of greenery tiles resources on the game board for each gamer."""
+        greenery_tiles = {}
+        for gamer_name in gamers_names_list:
+            greenery_tiles[gamer_name] = int(input(f'Number of {gamer_name}\'s greenery tiles: '))
+        return greenery_tiles
+
+    def get_city_tiles(self, gamers_names_list):
+        """Get number of city tiles on the game board for each gamer."""
+        city_tiles = {}
+        for gamer_name in gamers_names_list:
+            city_tiles[gamer_name] = int(input(f'Number of {gamer_name}\'s city tiles: '))
+        return city_tiles
+
+    def get_greenery_tiles_adjacent_to_city_tiles(self, gamers_names_list):
+        """Get number of greenery tiles on the game board adjacent to city tiles for each gamer."""
+        greenery_tiles_adjacent_to_city_tiles = {}
+        city_tiles = self.get_city_tiles(gamers_names_list)
+        for gamer_name in gamers_names_list:
+            greenery_tiles_adjacent_to_city_tile = 0
+            for city_tile_number in range(1, city_tiles[gamer_name] + 1):
+                greenery_tiles_adjacent_to_city_tile += int(input(f'Greenery tiles adjacent to {gamer_name}\'s {city_tile_number}. city tile: '))
+            greenery_tiles_adjacent_to_city_tiles[gamer_name] = greenery_tiles_adjacent_to_city_tile
+        return greenery_tiles_adjacent_to_city_tiles
+
+    def get_tiles_vps(self, gamers_names_list):
+        """Get Victory Points (VPs) for tiles resources on the game board for each gamer."""
+        tiles_vps = {}
+        tiles_vps['greenery_tiles_vps'] = self.get_greenery_tiles(gamers_names_list)
+        tiles_vps['greenery_tiles_adjacent_to_city_tiles_vps'] = self.get_greenery_tiles_adjacent_to_city_tiles(
+            gamers_names_list)
+        return tiles_vps
+
+    def get_gameboard_tiles_vps(self, gamers_names_list):
+        """Get victory points (VPs) claimed from the tiles on the game board."""
+        gameboard_tiles_vps = self.get_gameboard_tiles(gamers_names_list)
+        gameboard_tiles_vps.pop('city_tiles', None)
+        return gameboard_tiles_vps
 
     def get_gamer_achievements(self, gamers_names):
         """Score 'Terraforming Mars' board game."""
         print('\nTERRAFORMING RATE\n')
-        gamers_tr_vps = self.get_gamers_tr_vps(gamers_names)
-        print(gamers_tr_vps)
+        #gamers_tr_vps = self.get_gamers_tr_vps(gamers_names)
+        #print(gamers_tr_vps)
         print('\nAWARDS\n')
         gamers_awards_resources = self.get_funded_awards_resources(gamers_names)
         print(gamers_awards_resources)
         print('\nMILESTONES\n')
-        milestones_vps = self.get_milestones_vps(self.get_claimed_milestones(gamer_name))
-        print('\nGAME BOARD TILES')
-        greenery_tiles_vps, greenery_tiles_adjacent_to_city_tile_vps = self.get_gameboard_vps(gamer_name)
+        #milestones_vps = self.get_gamers_milestones_vps(gamers_names)
+        #print(milestones_vps)
+        print('\nGAME BOARD TILES\n')
+        #print(self.get_greenery_tiles(gamers_names))
+        #print(self.get_city_tiles(gamers_names))
+        #print(self.get_greenery_tiles_adjacent_to_city_tiles(gamers_names))
+        #tiles_vps = self.get_tiles_vps(gamers_names)
+        #print(tiles_vps)
         print('\nRESOURCES CARDS\n')
         resources_cards_vps = int(input(f'Resources cards Victory Points (VPs): '))
         print('\nCARDS\n')

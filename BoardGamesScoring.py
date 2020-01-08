@@ -3,7 +3,7 @@
 __VERSION__ = '1.0.C'
 
 from my_package.appcli import Cli
-from my_package.dir_operations import inner_to_outer_dir
+from my_package.dict_operations import inner_to_outer_dict
 from my_package.boardgame import TerraformingMars
 
 
