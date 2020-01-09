@@ -116,7 +116,7 @@ class TerraformingMars(object):
             greenery_tiles_adjacent_to_city_tiles[gamer_name] = greenery_tiles_adjacent_to_city_tile
         return greenery_tiles_adjacent_to_city_tiles
 
-    def get_tiles_vps(self, gamers_names_list):
+    def get_gamers_tiles_vps(self, gamers_names_list):
         """Get Victory Points (VPs) for tiles resources on the game board for each gamer."""
         tiles_vps = {}
         tiles_vps['greenery_tiles_vps'] = self.get_greenery_tiles(gamers_names_list)
@@ -124,19 +124,34 @@ class TerraformingMars(object):
             gamers_names_list)
         return tiles_vps
 
-    def get_gameboard_tiles_vps(self, gamers_names_list):
-        """Get victory points (VPs) claimed from the tiles on the game board."""
-        gameboard_tiles_vps = self.get_gameboard_tiles(gamers_names_list)
-        gameboard_tiles_vps.pop('city_tiles', None)
-        return gameboard_tiles_vps
-
-    def get_resources_cards_vps(self, gamers_names_list):
+    def get_gamers_resource_cards_vps(self, gamers_names_list):
         """Get Victory Points (VPs) claimed from resources cards."""
-        pass
+        gamers_resource_cards_vps = {}
+        resource_cards_vps = []
+        for gamer_name in gamers_names_list:
+            number_of_resource_cards = int(input(f'Number of resource cards claimed by {gamer_name}: '))
+            for card_number in range(1, number_of_resource_cards + 1):
+                resource_card_vps = int(input(f'Victory Points (VPs) on {gamer_name}\'s {card_number}. resource card: '))
+                resource_cards_vps.append(resource_card_vps)
+                card_number += 1
+            gamers_resource_cards_vps[gamer_name] = resource_cards_vps
+            resource_cards_vps = []
+        return gamers_resource_cards_vps
 
-    def get_other_cards_vps(self, gamers_names_list):
+    def get_gamers_other_cards_vps(self, gamers_names_list):
         """Get Victory Points (VPs) claimed from other cards."""
-        pass
+        gamers_other_cards_vps = {}
+        other_cards_vps = []
+        for gamer_name in gamers_names_list:
+            number_of_other_cards = int(input(f'Number of other cards claimed by {gamer_name}: '))
+            for card_number in range(1, number_of_other_cards + 1):
+                other_card_vps = int(
+                    input(f'Victory Points (VPs) on {gamer_name}\'s {card_number}. resource card: '))
+                other_cards_vps.append(other_card_vps)
+                card_number += 1
+            gamers_other_cards_vps[gamer_name] = other_cards_vps
+            other_cards_vps = []
+        return gamers_other_cards_vps
 
     def get_gamer_achievements(self, gamers_names):
         """Score 'Terraforming Mars' board game."""
@@ -144,20 +159,17 @@ class TerraformingMars(object):
         #gamers_tr_vps = self.get_gamers_tr_vps(gamers_names)
         #print(gamers_tr_vps)
         print('\nAWARDS\n')
-        gamers_awards_resources = self.get_funded_awards_resources(gamers_names)
-        print(gamers_awards_resources)
+        #gamers_awards_resources = self.get_funded_awards_resources(gamers_names)
+        #print(gamers_awards_resources)
         print('\nMILESTONES\n')
-        #milestones_vps = self.get_gamers_milestones_vps(gamers_names)
-        #print(milestones_vps)
+        #gamers_milestones_vps = self.get_gamers_milestones_vps(gamers_names)
+        #print(gamers_milestones_vps)
         print('\nGAME BOARD TILES\n')
-        #print(self.get_greenery_tiles(gamers_names))
-        #print(self.get_city_tiles(gamers_names))
-        #print(self.get_greenery_tiles_adjacent_to_city_tiles(gamers_names))
-        #tiles_vps = self.get_tiles_vps(gamers_names)
-        #print(tiles_vps)
+        #gamers_tiles_vps = self.get_gamers_tiles_vps(gamers_names)
+        #print(gamers_tiles_vps)
         print('\nRESOURCES CARDS\n')
-        #resources_cards_vps = int(input(f'Resources cards Victory Points (VPs): '))
+        #gamers_resource_cards_vps = self.get_gamers_resource_cards_vps(gamers_names)
+        #print(gamers_resource_cards_vps)
         print('\nOTHER CARDS\n')
-        #cards_vps = int(input(f'Cards Victory Points (VPs): '))
-        #return TR_vps, gamers_awards_resources, milestones_vps, greenery_tiles_vps, greenery_tiles_adjacent_to_city_tile_vps,\
-        #       resources_cards_vps, cards_vps
+        #gamers_other_cards_vps = self.get_gamers_other_cards_vps(gamers_names)
+        #print(gamers_other_cards_vps)
