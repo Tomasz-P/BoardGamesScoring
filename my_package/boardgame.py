@@ -2,7 +2,7 @@
 
 __VERSION__ = '1.0.0'
 
-from my_package.data_structures_ops import sort_keys_by_value, dict_keys_values_into_two_lists, create_list_matrix
+from my_package.data_structures_ops import sort_keys_by_value, dict_keys_values_into_two_lists, create_list_matrix, sum_inner_dicts_values, sum_inner_lists_values
 
 # CLASSES
 
@@ -182,22 +182,25 @@ class TerraformingMars(object):
 
     def get_gamers_vps(self):
         """Score 'Terraforming Mars' board game for each gamer."""
-        print('\nTERRAFORMING RATE\n')
-        gamers_tr_vps = self.get_gamers_tr_vps()
+        dict = {'Tomasz': [2, 5, 3, 4], 'Szymon': [5, 3, 2], 'Bartosz': [4,7,1,5,3,7,9]}
+        # print('\nTERRAFORMING RATE\n')
+        # gamers_tr_vps = self.get_gamers_tr_vps()
         print('\nAWARDS\n')
-        gamers_awards_vps = self.get_gamers_awards_vps()
-        print('\nMILESTONES\n')
-        gamers_milestones_vps = self.get_gamers_milestones_vps()
-        print('\nGAME BOARD TILES\n')
-        gamers_tiles_vps = self.get_gamers_tiles_vps()
-        print('\nRESOURCES CARDS\n')
-        gamers_resource_cards_vps = self.get_gamers_resource_cards_vps()
-        print('\nOTHER CARDS\n')
-        gamers_other_cards_vps = self.get_gamers_other_cards_vps()
-
-        print(gamers_tr_vps)
-        print(gamers_awards_vps)
-        print(gamers_milestones_vps)
-        print(gamers_tiles_vps)
-        print(gamers_resource_cards_vps)
-        print(gamers_other_cards_vps)
+        # gamers_awards_vps = self.get_gamers_awards_vps()
+        sum = sum_inner_lists_values(dict)
+        print(sum)
+        # print('\nMILESTONES\n')
+        # gamers_milestones_vps = self.get_gamers_milestones_vps()
+        # print('\nGAME BOARD TILES\n')
+        # gamers_tiles_vps = self.get_gamers_tiles_vps()
+        # print('\nRESOURCES CARDS\n')
+        # gamers_resource_cards_vps = self.get_gamers_resource_cards_vps()
+        # print('\nOTHER CARDS\n')
+        # gamers_other_cards_vps = self.get_gamers_other_cards_vps()
+        #
+        # print(gamers_tr_vps)
+        # print(gamers_awards_vps)
+        # print(gamers_milestones_vps)
+        # print(gamers_tiles_vps)
+        # print(gamers_resource_cards_vps)
+        # print(gamers_other_cards_vps)

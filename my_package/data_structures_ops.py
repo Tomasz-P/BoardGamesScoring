@@ -61,3 +61,31 @@ def create_list_matrix(base_list):
             i += 1
             list_matrix.append(i)
     return list_matrix
+
+def sum_inner_dicts_values(outer_dictionary):
+    """Create a new dictionary with keys that are taken from inner dictionaries
+    and values which are sums of inner dictionaries' values for each key.
+    EXAMPLE: {'AA': {'a': 5, 'b': 2, 'c': 0}, 'BB': {'b': 5, 'c': 5, 'a': 2}, 'CC': {'a': 5, 'b': 2, 'c': 0}}
+    new_dictionary = {'a': 12, 'b': 9, 'c': 5}
+    """
+    new_dictionary = {}
+    for outer_key in outer_dictionary.keys():
+        for inner_key, inner_value in outer_dictionary[outer_key].items():
+            if not inner_key in new_dictionary:
+                new_dictionary[inner_key] = 0
+            new_dictionary[inner_key] += inner_value
+    return new_dictionary
+
+def sum_inner_lists_values(base_dictionary):
+    """Create a new dictionary with the same keys as in base dictionary
+    and values which are sums of inner list's values for each key.
+    EXAMPLE: {'a': [2, 5, 3, 4], 'b': [5, 3, 2], 'c': [4]}
+    new_dictionary = {'a': 14, 'b': 10, 'c': 4}
+    """
+    new_dictionary = {}
+    for key in base_dictionary.keys():
+        for list_value in base_dictionary[key]:
+            if not key in new_dictionary:
+                new_dictionary[key] = 0
+            new_dictionary[key] += list_value
+    return new_dictionary
