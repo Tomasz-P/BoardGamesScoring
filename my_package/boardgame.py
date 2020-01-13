@@ -1,6 +1,6 @@
 """A module that contains classes, methods, attributes for scoring in board games."""
 
-__VERSION__ = '1.0.0'
+__VERSION__ = '1.1.0'
 
 from my_package.data_structures_ops import sort_keys_by_value, dict_keys_values_into_two_lists, create_list_matrix, sum_inner_dicts_values, sum_inner_lists_values
 
@@ -39,7 +39,7 @@ class TerraformingMars(object):
         funded_awards_resources = {}
         for award in self.AWARDS.keys():
             answer = ''
-            while (answer is not 'y') and (answer is not 'n'):
+            while (answer != 'y') and (answer != 'n'):
                 answer = input(f'Award "{award}" was funded [y/n]: ')
             if answer == 'y':
                 gamers_resources = {}
@@ -62,10 +62,10 @@ class TerraformingMars(object):
                 funded_awards_resources[award] = gamers_resources
         return funded_awards_resources
 
-    def get_gamers_awards_vps(self):
-        """Calculate Victory Points obtained from funded awards resources."""
+    def get_detail_funded_awards_vps(self):
+        """Calculate Victory Points obtained from funded awards resources in detail."""
         funded_awards_resources = self.get_funded_awards_resources()
-        gamers_awards_vps = {}
+        detail_funded_awards_vps = {}
         for funded_award in funded_awards_resources:
             sorted_gamers_by_awards_resources = sort_keys_by_value(funded_awards_resources[funded_award])
             gamers, awards_resources = dict_keys_values_into_two_lists(sorted_gamers_by_awards_resources)
@@ -75,23 +75,28 @@ class TerraformingMars(object):
                 for position in range(0, len(awards_resources_matrix)):
                     if awards_resources_matrix[position] == 1:
                         gamer_award_vps[gamers[position]] = self.AWARDS[funded_award][0]
-                        gamers_awards_vps[funded_award] = gamer_award_vps
+                        detail_funded_awards_vps[funded_award] = gamer_award_vps
                     elif awards_resources_matrix[position] == 2:
                         gamer_award_vps[gamers[position]] = self.AWARDS[funded_award][1]
-                        gamers_awards_vps[funded_award] = gamer_award_vps
+                        detail_funded_awards_vps[funded_award] = gamer_award_vps
                     else:
                         gamer_award_vps[gamers[position]] = 0
-                        gamers_awards_vps[funded_award] = gamer_award_vps
+                        detail_funded_awards_vps[funded_award] = gamer_award_vps
             elif len(gamers) == 2:
                 gamer_award_vps = {}
                 for position in range(0, len(awards_resources_matrix)):
                     if awards_resources_matrix[position] == 1:
                         gamer_award_vps[gamers[position]] = self.AWARDS[funded_award][0]
-                        gamers_awards_vps[funded_award] = gamer_award_vps
+                        detail_funded_awards_vps[funded_award] = gamer_award_vps
                     else:
                         gamer_award_vps[gamers[position]] = 0
-                        gamers_awards_vps[funded_award] = gamer_award_vps
-        return gamers_awards_vps
+                        detail_funded_awards_vps[funded_award] = gamer_award_vps
+        return detail_funded_awards_vps
+
+    def get_gamers_funded_awards_vps(self):
+        """Calculate Victory Points obtained from funded awards by each gamer."""
+        gamers_funded_awards_vps = sum_inner_dicts_values(self.get_detail_funded_awards_vps())
+        return gamers_funded_awards_vps
 
     def get_gamers_milestones(self):
         """Get milestones claimed during the game by the gamers and return a dictionary
@@ -104,7 +109,7 @@ class TerraformingMars(object):
         for milestone in self.MILESTONES:
             for gamer in self.gamers_names:
                 answer = ''
-                while (answer is not 'y') and (answer is not 'n'):
+                while (answer != 'y') and (answer != 'n'):
                     answer = input(f'{gamer} claimed a milestone "{milestone}" [y/n]: ')
                 if answer == 'y':
                     milestones_claimed_by_users[gamer].append(milestone)
@@ -144,16 +149,21 @@ class TerraformingMars(object):
             greenery_tiles_adjacent_to_city_tiles[gamer_name] = greenery_tiles_adjacent_to_city_tile
         return greenery_tiles_adjacent_to_city_tiles
 
+    def get_detail_tiles_vps(self):
+        """Get Victory Points (VPs) for tiles resources on the game board for each gamer in detail."""
+        detail_tiles_vps = {}
+        detail_tiles_vps['greenery_tiles_vps'] = self.get_greenery_tiles()
+        detail_tiles_vps['greenery_tiles_adjacent_to_city_tiles_vps'] = self.get_greenery_tiles_adjacent_to_city_tiles()
+        return detail_tiles_vps
+
     def get_gamers_tiles_vps(self):
         """Get Victory Points (VPs) for tiles resources on the game board for each gamer."""
-        tiles_vps = {}
-        tiles_vps['greenery_tiles_vps'] = self.get_greenery_tiles()
-        tiles_vps['greenery_tiles_adjacent_to_city_tiles_vps'] = self.get_greenery_tiles_adjacent_to_city_tiles()
-        return tiles_vps
+        gamers_tiles_vps = sum_inner_dicts_values(self.get_detail_tiles_vps())
+        return gamers_tiles_vps
 
-    def get_gamers_resource_cards_vps(self):
-        """Get Victory Points (VPs) claimed from resources cards."""
-        gamers_resource_cards_vps = {}
+    def get_detail_gamers_resource_cards_vps(self):
+        """Get Victory Points (VPs) claimed from resources cards for each gamer in detail."""
+        detail_gamers_resource_cards_vps = {}
         resource_cards_vps = []
         for gamer_name in self.gamers_names:
             number_of_resource_cards = int(input(f'Number of resource cards claimed by {gamer_name}: '))
@@ -161,13 +171,18 @@ class TerraformingMars(object):
                 resource_card_vps = int(input(f'Victory Points (VPs) on {gamer_name}\'s {card_number}. resource card: '))
                 resource_cards_vps.append(resource_card_vps)
                 card_number += 1
-            gamers_resource_cards_vps[gamer_name] = resource_cards_vps
+            detail_gamers_resource_cards_vps[gamer_name] = resource_cards_vps
             resource_cards_vps = []
+        return detail_gamers_resource_cards_vps
+
+    def get_gamers_resource_cards_vps(self):
+        """Get Victory Points (VPs) claimed from resources cards for each gamer."""
+        gamers_resource_cards_vps = sum_inner_lists_values(self.get_detail_gamers_resource_cards_vps())
         return gamers_resource_cards_vps
 
-    def get_gamers_other_cards_vps(self):
-        """Get Victory Points (VPs) claimed from other cards."""
-        gamers_other_cards_vps = {}
+    def get_detail_gamers_other_cards_vps(self):
+        """Get Victory Points (VPs) claimed from other cards for each gamer in detail."""
+        detail_gamers_other_cards_vps = {}
         other_cards_vps = []
         for gamer_name in self.gamers_names:
             number_of_other_cards = int(input(f'Number of other cards claimed by {gamer_name}: '))
@@ -176,31 +191,38 @@ class TerraformingMars(object):
                     input(f'Victory Points (VPs) on {gamer_name}\'s {card_number}. resource card: '))
                 other_cards_vps.append(other_card_vps)
                 card_number += 1
-            gamers_other_cards_vps[gamer_name] = other_cards_vps
+            detail_gamers_other_cards_vps[gamer_name] = other_cards_vps
             other_cards_vps = []
+        return detail_gamers_other_cards_vps
+
+    def get_gamers_other_cards_vps(self):
+        """Get Victory Points (VPs) claimed from other cards for each gamer."""
+        gamers_other_cards_vps = sum_inner_lists_values(self.get_detail_gamers_other_cards_vps())
         return gamers_other_cards_vps
 
     def get_gamers_vps(self):
         """Score 'Terraforming Mars' board game for each gamer."""
-        dict = {'Tomasz': [2, 5, 3, 4], 'Szymon': [5, 3, 2], 'Bartosz': [4,7,1,5,3,7,9]}
-        # print('\nTERRAFORMING RATE\n')
-        # gamers_tr_vps = self.get_gamers_tr_vps()
-        print('\nAWARDS\n')
-        # gamers_awards_vps = self.get_gamers_awards_vps()
-        sum = sum_inner_lists_values(dict)
-        print(sum)
-        # print('\nMILESTONES\n')
-        # gamers_milestones_vps = self.get_gamers_milestones_vps()
-        # print('\nGAME BOARD TILES\n')
-        # gamers_tiles_vps = self.get_gamers_tiles_vps()
-        # print('\nRESOURCES CARDS\n')
-        # gamers_resource_cards_vps = self.get_gamers_resource_cards_vps()
-        # print('\nOTHER CARDS\n')
-        # gamers_other_cards_vps = self.get_gamers_other_cards_vps()
-        #
-        # print(gamers_tr_vps)
-        # print(gamers_awards_vps)
-        # print(gamers_milestones_vps)
-        # print(gamers_tiles_vps)
-        # print(gamers_resource_cards_vps)
-        # print(gamers_other_cards_vps)
+        print('\nTERRAFORMING RATE\n')
+        gamers_tr_vps = self.get_gamers_tr_vps()
+        if len(self.gamers_names) > 1:
+            print('\nAWARDS\n')
+            gamers_funded_awards_vps = self.get_gamers_funded_awards_vps()
+            print('\nMILESTONES\n')
+            gamers_milestones_vps = self.get_gamers_milestones_vps()
+        print('\nGAME BOARD TILES\n')
+        gamers_tiles_vps = self.get_gamers_tiles_vps()
+        print('\nRESOURCES CARDS\n')
+        gamers_resource_cards_vps = self.get_gamers_resource_cards_vps()
+        print('\nOTHER CARDS\n')
+        gamers_other_cards_vps = self.get_gamers_other_cards_vps()
+
+        gamers_vps = {}
+        for gamer_name in self.gamers_names:
+            if len(self.gamers_names) > 1:
+                gamers_vps[gamer_name] = gamers_tr_vps[gamer_name] + gamers_funded_awards_vps[gamer_name] \
+                                         + gamers_milestones_vps[gamer_name] + gamers_tiles_vps[gamer_name] \
+                                         + gamers_resource_cards_vps[gamer_name] + gamers_other_cards_vps[gamer_name]
+            else:
+                gamers_vps[gamer_name] = gamers_tr_vps[gamer_name] + gamers_tiles_vps[gamer_name] \
+                                         + gamers_resource_cards_vps[gamer_name] + gamers_other_cards_vps[gamer_name]
+        return gamers_vps

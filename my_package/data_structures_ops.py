@@ -1,5 +1,6 @@
 """Functions that enable operations on a dictionary data structure."""
 
+__VERSION__ = '1.0.0'
 
 # FUNCTIONS
 

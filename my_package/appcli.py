@@ -1,9 +1,10 @@
 """A module that contains methods, attributes for creating and managing command line interface."""
 
-__VERSION__ = '1.0.0'
+__VERSION__ = '1.1.0'
 
 from platform import system
 from subprocess import run
+from my_package.data_structures_ops import sort_keys_by_value, dict_keys_values_into_two_lists
 
 
 # CLASSES
@@ -49,3 +50,13 @@ class Cli(object):
             value = input(text + ' ' + str(number) + ': ')
             values.append(value)
         return values
+
+    def print_game_results(self, boardgame, gamers_vps):
+        """Print names of gamers and victory points (VPs) obtained by them."""
+        gamers, vps = dict_keys_values_into_two_lists(sort_keys_by_value(gamers_vps))
+        print(f'\n\n{boardgame.upper()} - Victory Points\n')
+        for gamers_name in gamers_vps.keys():
+            print(f'{gamers_name}  -  {gamers_vps[gamers_name]}')
+        if len(gamers) > 1:
+            print(f'\nThe winner is {gamers[0]} with {vps[0]} VPs.')
+        return 0
